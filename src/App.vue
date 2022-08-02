@@ -1,15 +1,17 @@
 <template>
   <section v-if="inProgressTaskList()">
-    <div class="grid bg-slate-800 p-3 rounded-2xl">
-      <h2 class="p-3 text-2xl text-stone-50 text-center">In Progress Task List</h2>
-      <TaskList :tasks="tasks.filter((t) => !t.completed)" />
-    </div>
+    <TaskList
+        :tasks="tasks.filter((t) => !t.completed)"
+        :title="'In Progress Task List'"
+        @save-task="addTask"
+    />
   </section>
   <section class="mt-2" v-if="completedTaskList()">
-    <div class="grid bg-slate-800 p-3 rounded-2xl">
-      <h2 class="p-3 text-2xl text-stone-50 text-center">Completed Task List</h2>
-      <TaskList :tasks="tasks.filter((t) => t.completed)" />
-    </div>
+    <TaskList
+      :tasks="tasks.filter((t) => t.completed)"
+      :title="'Completed Task List'"
+      :in-progress="false"
+    />
   </section>
 </template>
 <script setup>
@@ -39,6 +41,13 @@ let tasks = ref([
   },
 ]);
 
+function addTask(name) {
+  tasks.value.push({
+    id:tasks.value.length++,
+    name:name,
+    completed:false
+  })
+}
 function completedTaskList() {
   return this.tasks.filter((t) => t.completed).length;
 }
