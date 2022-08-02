@@ -7,6 +7,15 @@
         class="py-4 flex justify-items-start place-content-between"
       >
         <Task :task="task" />
+        <button
+          v-show="inProgress"
+          aria-label="delete item"
+          class="text-white text-sm rounded bg-red-600"
+          type="button"
+          @click="$emit('deleteTask', task)"
+        >
+          X
+        </button>
       </li>
     </ul>
     <div v-show="inProgress" class="flex">
@@ -19,7 +28,7 @@
         class="bg-gray-200 p-2 rounded-md mt-2 ml-1.5 py-1.5 px-3 text-slate-500 text-xs"
         type="button"
         value="Add"
-        @click="$emit('saveTask', this.task)"
+        @click="$emit('saveTask', this.task), (this.task = null)"
       />
     </div>
   </CardTemplate>
@@ -29,7 +38,7 @@ import CardTemplate from "@/components/CardTemplate.vue";
 import Task from "@/components/Task.vue";
 import { ref } from "vue";
 
-defineEmits(["saveTask"]);
+defineEmits(["saveTask", "deleteTask"]);
 
 const task = ref(null);
 const props = defineProps({

@@ -1,12 +1,13 @@
 <template>
-  <section v-if="inProgressTaskList()">
+  <section v-show="inProgressTaskList()">
     <TaskList
-        :tasks="tasks.filter((t) => !t.completed)"
-        :title="'In Progress Task List'"
-        @save-task="addTask"
+      :tasks="tasks.filter((t) => !t.completed)"
+      :title="'In Progress Task List'"
+      @save-task="addTask"
+      @delete-task="deleteTask"
     />
   </section>
-  <section class="mt-2" v-if="completedTaskList()">
+  <section class="mt-2" v-show="completedTaskList()">
     <TaskList
       :tasks="tasks.filter((t) => t.completed)"
       :title="'Completed Task List'"
@@ -41,12 +42,21 @@ let tasks = ref([
   },
 ]);
 
+function deleteTask(task) {
+  console.log(task);
+  for (let i = 0; i < tasks.value.length; i++) {
+    if (tasks.value[i] === task) {
+      tasks.value.splice(i, 1);
+    }
+  }
+  console.log(tasks.value);
+}
 function addTask(name) {
   tasks.value.push({
-    id:tasks.value.length++,
-    name:name,
-    completed:false
-  })
+    id: tasks.value.length++,
+    name: name,
+    completed: false,
+  });
 }
 function completedTaskList() {
   return this.tasks.filter((t) => t.completed).length;
